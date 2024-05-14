@@ -1,0 +1,179 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        #container {
+            width: 70%;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            border: 1px solid #484343;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #ac8383;
+        }
+
+        input, button {
+            padding: 10px;
+            margin: 5px;
+            border: 1px solid #d35050;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        input[type="text"] {
+            width: 100px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #ERR {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<div id="container">
+    <h1>Grade Calculator</h1>
+
+    <button onclick="addActivity()">Add Activity</button>
+    <label for="activity">Activity</label>
+    <input type="text" id="activity">
+
+    <label for="Weight">Weight</label>
+    <input type="text" id="Weight"><br>
+
+    <button onclick="addGrade()">Add Grade</button>
+    <label for="grade">Grade</label>
+    <input type="text" id="grade">
+
+    <label for="activityNo">Activity No</label>
+    <input type="text" id="activityNo"><br>
+
+    <button onclick="deleteActivity()">Delete Activity</button>
+
+    <table id="theTable">
+        <tr>
+            <th>No</th>
+            <th>Activity</th>
+            <th>Weight</th>
+            <th>Grade</th>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>Lab1</td>
+            <td>10</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>Lab2</td>
+            <td>20</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>Test1</td>
+            <td>30</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>4</td>
+            <td>Test2</td>
+            <td>40</td>
+            <td></td>
+        </tr>
+    </table>
+    <p id="ERR">Error Message:</p>
+</div>
+<script>
+    let noActivity = 4;
+    let totalWeight = 100;
+    let ERR = document.getElementById("ERR");
+
+    function addActivity() {
+        let activity = document.getElementById("activity").value;
+        let weight = document.getElementById("Weight").value;
+
+        if (activity === "") {
+            ERR.innerHTML = "Error Message: Activity name is required.";
+        } else if (weight === "" || weight < 1 || weight > 100) {
+            ERR.innerHTML = "Error Message: Weight is invalid.";
+        } else {
+            let table = document.getElementById("theTable");
+            let row = table.insertRow(noActivity + 1);
+            let cell1 = row.insertCell(0);
+            let cell2 = row.insertCell(1);
+            let cell3 = row.insertCell(2);
+            let cell4 = row.insertCell(3);
+
+            cell1.innerHTML = noActivity + 1;
+            cell2.innerHTML = activity;
+            cell3.innerHTML = weight;
+            cell4.innerHTML = "";
+
+            noActivity++;
+            document.getElementById("activity").value = "";
+            document.getElementById("Weight").value = "";
+        }
+    }
+
+    function deleteActivity() {
+        let activityNo = parseInt(document.getElementById("activityNo").value);
+        if (activityNo >= 1 && activityNo <= noActivity) {
+            document.getElementById("theTable").deleteRow(activityNo);
+            noActivity--;
+        } else {
+            ERR.innerHTML = "Error Message: Invalid activity number.";
+        }
+        document.getElementById("activityNo").value = "";
+    }
+
+    function addGrade() {
+        let grade = document.getElementById("grade").value;
+        let activityNo = document.getElementById("activityNo").value;
+
+        if (grade === "" || grade < 0 || grade > 100) {
+            ERR.innerHTML = "Error Message: Grade is invalid.";
+        } else if (activityNo === "" || activityNo < 1 || activityNo > noActivity) {
+            ERR.innerHTML = "Error Message: Activity No is invalid.";
+        } else {
+            let table = document.getElementById("theTable");
+            let row = table.rows[activityNo];
+            row.cells[3].innerHTML = grade;
+
+            document.getElementById("grade").value = "";
+            document.getElementById("activityNo").value = "";
+        }
+    }
+</script>
+</body>
+</html>
